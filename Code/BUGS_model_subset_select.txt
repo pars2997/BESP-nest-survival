@@ -1,0 +1,103 @@
+
+model {
+  #HyperPriors
+   for (i in 1:nYear){
+    eta.s[i] ~ dnorm(0, tau)   #year effect
+
+    
+    beta.year.n[i] <- beta.pre.n*pre[i] + eta.s[i]
+    beta.year.i[i] <- beta.pre.i*pre[i] + eta.s[i]
+    beta.year.o[i] <- beta.pre.o*pre[i] + eta.s[i]
+    }
+  #Precision hyperparameters
+    tau <- 1/(pow(sigma.n,2))
+  
+    beta.pre.n ~ dnorm(0,0.01)
+    beta.pre.i ~ dnorm(0,0.01)
+    beta.pre.o ~ dnorm(0,0.01)
+
+  #Standard Deviation hyperparameters
+    sigma.n ~ dunif(0,15)
+
+ # Priors for native sources of mortality
+    alpha.n ~ dnorm(0, 0.01) #intercept
+    beta.n.dos ~ dnorm(0, 0.01) #dos slope
+    beta.n.dos2 ~ dnorm(0, 0.01) #dos2 slope
+    beta.n.sage ~ dnorm(0,0.01)
+    beta.n.other ~ dnorm(0,0.01)
+
+ #priors for invasive
+    alpha.i ~ dnorm(0, 0.01)  #intercept
+    beta.i.dos ~ dnorm(0, 0.01) #dos slope
+    beta.i.dos2 ~ dnorm(0, 0.01) #dos2 slope
+    beta.i.sage ~ dnorm(0,0.01)
+    beta.i.other ~ dnorm(0,0.01)
+
+   #priors for other
+    alpha.o ~ dnorm(0,0.01)  #intercept
+    beta.o.dos ~ dnorm(0, 0.01) #dos slope
+    beta.o.dos2 ~ dnorm(0, 0.01) #dos2 slope
+    beta.o.sage ~ dnorm(0,0.01)
+    beta.o.other ~ dnorm(0,0.01)
+   
+ # Likelihood
+  for (i in 1:n) {
+   #linear predictors (Equation 2)
+   #other: 
+    cto[i] <- exp(alpha.o + beta.year.o[year[i]]
+                    + beta.o.dos*dos[i]
+                    + beta.o.dos2*dos2[i]
+                    + beta.o.sage*sage[i]
+                    + beta.o.other*other[i])
+
+   #native:
+    ctn[i] <- exp(alpha.n + beta.year.n[year[i]] 
+                    + beta.n.dos*dos[i]
+                    + beta.n.dos2*dos2[i]
+	                	+ beta.n.sage*sage[i]
+                    + beta.n.other*other[i])
+
+   #invasive:
+    cti[i] <- exp(alpha.i + beta.year.i[year[i]]
+                    + beta.i.dos*dos[i]
+                    + beta.i.dos2*dos2[i]
+	                	+ beta.i.sage*sage[i]
+                    + beta.i.other*other[i])
+    cts[i] <- 1
+
+   #Equation 5
+    den[i] <- cto[i] + ctn[i] + cti[i] + cts[i]  
+    survp[i] <- cts[i]/den[i]
+#interval nest loss probabilities (Equation 4)
+#other: 
+p[i,4] <- ((cto[i]/(den[i]))/(1 - survp[i]))*(1 - pow(survp[i], interval[i])) 
+
+#invasive
+p[i,3] <- ((cti[i]/(den[i]))/(1 - survp[i]))*(1 - pow(survp[i], interval[i])) 
+ 
+#native
+p[i,2] <- ((ctn[i]/(den[i]))/(1 - survp[i]))*(1 - pow(survp[i], interval[i])) 
+
+#interval survival probability 
+p[i,1] <- pow(survp[i],interval[i])
+
+#Equation 1    
+Fate[i,1:4] ~ dmulti(p[i,] , 1 )
+    
+}
+  ctn.a <- exp(alpha.n)
+  cti.a <- exp(alpha.i)
+  cto.a <- exp(alpha.o)
+  den.a <- (ctn.a + cti.a + cto.a + 1)
+  
+  Surv <- 1/den.a
+  Native <- ctn.a/den.a
+  Invasive <- cti.a/den.a
+  Other <- cto.a/den.a
+  csurv<-pow(Surv,23)
+  cnat<-pow((1-Native),23)
+  cinv<-pow((1-Invasive),23)
+  coth<-pow((1-Other),23)
+    }
+    
+
