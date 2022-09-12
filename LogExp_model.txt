@@ -1,0 +1,42 @@
+
+model{
+  #priors
+  alpha.a ~ dnorm(0,0.01)
+  beta.pre ~ dnorm(0,0.01)
+  beta.dos ~ dnorm(0,0.01)
+  beta.dos2 ~ dnorm(0,0.01)
+  beta.sage ~ dnorm(0,0.01)
+  beta.other ~ dnorm(0,0.01)
+
+  
+  #random effect for years, with effect of precipitation
+  for(i in 1:nYear){
+  eta.y[i] ~ dnorm(0, tau.y)
+  beta.year[i] <- beta.pre*pre[i] + eta.y[i]
+  }
+
+  #hyperparameters for random effect
+  tau.y <- 1/(pow(sigma.y,2))
+  sigma.y ~ dunif(0,50)
+  
+  #survival model
+  for(i in 1:n){
+  #daily survival estimate is on logit scale
+  logit(S[i]) <- alpha.a + 
+                    beta.dos*dos[i] +
+                    beta.dos2*dos2[i] +
+                    beta.sage*sage[i] +
+                    beta.other*other[i] +
+                    beta.year[year[i]]
+  #success/failure on a given day is bernoulli trial of survival estimate
+  surv[i] ~ dbern(S[i]^interval[i])
+  }
+    # x is estimated null daily survival
+    x<-exp(alpha.a)/(exp(alpha.a)+1)
+    xsage<-exp(alpha.a + beta.sage)/(exp(alpha.a + beta.sage)+1)
+    xother<-exp(alpha.a + beta.other)/(exp(alpha.a + beta.other)+1)
+    # csurv is estimated nest success over 23 days
+    csurv<-pow(x,23)
+
+}
+    

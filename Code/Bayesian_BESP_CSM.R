@@ -600,19 +600,19 @@ plotdat2$Cause <- ordered(plotdat2$Cause, levels = c("Native","Non-native","Othe
 cause.plot <- ggplot(data = plotdat2,mapping = aes(x = Day, y = Mean, col = Cause))+
   geom_line(size = 1.5)+
   geom_ribbon(linetype = "dashed", aes(ymin = Lower, ymax = Upper, fill = Cause),alpha = 0.1)+
-  scale_fill_manual(values = c("gray10","gray20","gray30"))+
-  scale_color_manual(values = c("gray10","gray20","gray30"))+
+  scale_fill_manual(values = c("gray10","gray40","gray70"))+
+  scale_color_manual(values = c("gray10","gray40","gray70"))+
   theme_classic()+
   xlab("Day")+
   ylab("Nest Survival probability")+
   theme(axis.text = element_text(size=10))+
-  theme(axis.title = element_text(size=14))+
-  theme(legend.title = element_text(size = 14))+
+  theme(axis.title = element_text(size=12))+
+  theme(legend.title = element_text(size = 12))+
   theme(legend.text = element_text(size = 10))+
   ylim(0,1)+
   facet_grid(cols = vars(Cause))+
-  theme(legend.position = "none")+
-  theme(strip.text.x = element_text(size = 14))
+  theme(legend.position = "bottom")+
+  theme(strip.text.x = element_blank())
 
 png(file = "./Figures/causeplot.png",width = 6, height = 3,res = 300, units = "in")
 cause.plot
@@ -685,19 +685,19 @@ plotdat.substrate2$Substrate <- ordered(plotdat.substrate2$Substrate, levels = c
 sub.plot <- ggplot(data = plotdat.substrate2,mapping = aes(x = Day, y = Mean, col = Substrate))+
   geom_line(size = 1.5)+
   geom_ribbon(linetype = "dashed",aes(ymin = Lower, ymax = Upper, fill = Substrate),alpha = 0.2)+
-  scale_fill_manual(values = c("gray10","gray20","gray30"))+
-  scale_color_manual(values = c("gray10","gray20","gray30"))+
+  scale_fill_manual(values = c("gray10","gray40","gray70"))+
+  scale_color_manual(values = c("gray10","gray40","gray70"))+
   theme_classic()+
   xlab("Day")+
   ylab(" Nest Survival probability")+
   theme(axis.text = element_text(size=10))+
-  theme(axis.title = element_text(size=14))+
-  theme(legend.title = element_text(size = 14))+
+  theme(axis.title = element_text(size=12))+
+  theme(legend.title = element_text(size = 12))+
   theme(legend.text = element_text(size = 10))+
   ylim(0,1)+
   facet_grid(cols = vars(Substrate))+
-  theme(legend.position = "none")+
-  theme(strip.text.x = element_text(size = 14))
+  theme(legend.position = "bottom")+
+  theme(strip.text.x = element_blank())
 
 png(file = "./Figures/substrateplot.png",width = 6, height = 3,units = "in",res = 300)
 sub.plot
