@@ -1,4 +1,5 @@
-This repository contains the necessary R code and data to reproduce the results of Parsons et al. XXXX Nest survival and cause-specific mortality in the San Clemente Bell’s Sparrow.
+This repository contains the necessary R code and data to reproduce the results of Parsons et al. 2022, Nest survival and cause-specific mortality in the San Clemente Bell’s Sparrow published in the Hournal of Field Ornithology.
+https://doi.org/10.5751/JFO-00177-930402
 
 This project monitored 110 San Clemente Bell's Sparrow nests over 8 years using video cameras and reports on nest survival, environmental correlates of nest survival, and cause specific mortality.
 

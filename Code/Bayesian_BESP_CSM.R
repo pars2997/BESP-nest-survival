@@ -6,7 +6,7 @@ library(ggplot2)
 
 
 # Load data
-setwd("C:/Users/A02323599/Dropbox/IWS/Nest Survival/BESP/DoItAgain")
+setwd("C:/Users/parso/Dropbox/IWS/Nest Survival/BESP/DoItAgain")
 
 precip <- read.csv("./Data/precip.csv")
 substrate <- read.csv("./Data/BESPSubstrate.csv")
@@ -604,7 +604,7 @@ cause.plot <- ggplot(data = plotdat2,mapping = aes(x = Day, y = Mean, col = Caus
   scale_color_manual(values = c("gray10","gray40","gray70"))+
   theme_classic()+
   xlab("Day")+
-  ylab("Nest Survival probability")+
+  ylab("Nest survival probability")+
   theme(axis.text = element_text(size=10))+
   theme(axis.title = element_text(size=12))+
   theme(legend.title = element_text(size = 12))+
@@ -689,7 +689,7 @@ sub.plot <- ggplot(data = plotdat.substrate2,mapping = aes(x = Day, y = Mean, co
   scale_color_manual(values = c("gray10","gray40","gray70"))+
   theme_classic()+
   xlab("Day")+
-  ylab(" Nest Survival probability")+
+  ylab(" Nest survival probability")+
   theme(axis.text = element_text(size=10))+
   theme(axis.title = element_text(size=12))+
   theme(legend.title = element_text(size = 12))+
